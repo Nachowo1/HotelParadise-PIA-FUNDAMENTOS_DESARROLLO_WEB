@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ titulo }} | Hotel Paradise{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+
+        <div class="mb-4">
+            <h2 class="fw-bold">{{ titulo }}</h2>
+            <p class="text-muted">
+                Completa los datos de la habitación.
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="card-body p-4">
+
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {% if formulario.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ formulario.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    {% for campo in formulario %}
+                        <div class="mb-3">
+
+                            {% if campo.field.widget.input_type == 'checkbox' %}
+                                <div class="form-check">
+                                    {{ campo }}
+                                    <label class="form-check-label"
+                                        for="{{ campo.id_for_label }}">
+                                        {{ campo.label }}
+                                    </label>
+                                </div>
+                            {% else %}
+                                <label class="form-label fw-semibold"
+                                    for="{{ campo.id_for_label }}">
+                                    {{ campo.label }}
+                                </label>
+
+                                {{ campo }}
+                            {% endif %}
+
+                            {% if campo.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ campo.errors }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+                    {% endfor %}
+
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+
+                        <a href="{% url 'habitaciones:lista' %}"
+                        class="btn btn-outline-secondary">
+                            Cancelar
+                        </a>
+
+                        <button type="submit" class="btn btn-primary">
+                            Guardar habitación
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

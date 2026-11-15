@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard | Hotel Paradise{% endblock %}
+
+{% block content %}
+
+<div class="mb-4">
+    <h2 class="fw-bold">Panel principal</h2>
+    <p class="text-muted">
+        Resumen general de Hotel Paradise
+    </p>
+</div>
+
+<div class="row g-4">
+
+    <div class="col-md-6 col-xl-3">
+        <div class="card h-100">
+            <div class="card-body p-4">
+                <p class="text-muted mb-2">
+                    Total de clientes
+                </p>
+                <h2 class="fw-bold">
+                    {{ total_clientes }}
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+        <div class="card h-100">
+            <div class="card-body p-4">
+                <p class="text-muted mb-2">
+                    Total de habitaciones
+                </p>
+                <h2 class="fw-bold">
+                    {{ total_habitaciones }}
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+        <div class="card h-100">
+            <div class="card-body p-4">
+                <p class="text-muted mb-2">
+                    Total de reservaciones
+                </p>
+                <h2 class="fw-bold">
+                    {{ total_reservaciones }}
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+        <div class="card h-100">
+            <div class="card-body p-4">
+                <p class="text-muted mb-2">
+                    Habitaciones disponibles hoy
+                </p>
+                <h2 class="fw-bold text-brand-blue">
+                    {{ habitaciones_disponibles }}
+                </h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body p-4">
+                <h5 class="text-muted">
+                    Ingresos generados
+                </h5>
+
+                <h2 class="fw-bold text-brand">
+                    ${{ ingresos|floatformat:2 }}
+                </h2>
+
+                <p class="text-muted small mb-0">
+                    Total de reservaciones confirmadas
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-body p-4">
+
+        <h5 class="fw-bold mb-3">Accesos rápidos</h5>
+
+        <div class="d-flex flex-wrap gap-2">
+            <a href="{% url 'habitaciones:lista' %}"
+            class="btn btn-outline-primary">
+                Administrar habitaciones
+            </a>
+
+            <a href="{% url 'clientes:lista' %}"
+            class="btn btn-outline-primary">
+                Administrar clientes
+            </a>
+
+            <a href="{% url 'reservaciones:lista' %}"
+            class="btn btn-outline-primary">
+                Administrar reservaciones
+            </a>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

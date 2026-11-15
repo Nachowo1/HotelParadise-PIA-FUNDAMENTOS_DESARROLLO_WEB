@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ titulo }} | Hotel Paradise{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+
+        <h2 class="fw-bold mb-2">{{ titulo }}</h2>
+        <p class="text-muted mb-4">
+            Completa los datos de la reservación.
+        </p>
+
+        <div class="card">
+            <div class="card-body p-4">
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    {% if formulario.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ formulario.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    {% for campo in formulario %}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold"
+                                for="{{ campo.id_for_label }}">
+                                {{ campo.label }}
+                            </label>
+
+                            {{ campo }}
+
+                            {% if campo.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ campo.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <div class="alert alert-info">
+                        El total se calculará automáticamente
+                        según el precio de la habitación y
+                        las noches reservadas.
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{% url 'reservaciones:lista' %}"
+                        class="btn btn-outline-secondary">
+                            Cancelar
+                        </a>
+
+                        <button type="submit" class="btn btn-primary">
+                            Guardar reservación
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block title %}Reservaciones | Hotel Paradise{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Reservaciones</h2>
+        <p class="text-muted">
+            Administración de reservaciones del hotel
+        </p>
+    </div>
+
+    <a href="{% url 'reservaciones:crear' %}"
+    class="btn btn-primary">
+        + Nueva reservación
+    </a>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body p-3">
+
+        <form method="GET" class="row g-3 align-items-end">
+
+            <div class="col-md-3">
+                <label for="cliente" class="form-label fw-semibold">
+                    Cliente
+                </label>
+
+                <input
+                    type="text"
+                    name="cliente"
+                    id="cliente"
+                    class="form-control"
+                    placeholder="Nombre o apellidos"
+                    value="{{ cliente }}"
+                >
+            </div>
+
+            <div class="col-md-3">
+                <label for="habitacion" class="form-label fw-semibold">
+                    Habitación
+                </label>
+
+                <input
+                    type="text"
+                    name="habitacion"
+                    id="habitacion"
+                    class="form-control"
+                    placeholder="Ej. 101"
+                    value="{{ habitacion }}"
+                >
+            </div>
+
+            <div class="col-md-3">
+                <label for="tipo" class="form-label fw-semibold">
+                    Tipo de habitación
+                </label>
+
+                <select
+                    name="tipo"
+                    id="tipo"
+                    class="form-select"
+                >
+                    <option value="">Todos los tipos</option>
+
+                    {% for valor, nombre in tipos_habitacion %}
+                        <option
+                            value="{{ valor }}"
+                            {% if tipo == valor %}selected{% endif %}
+                        >
+                            {{ nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-3 d-flex gap-2">
+
+                <button type="submit" class="btn btn-primary">
+                    Buscar
+                </button>
+
+                <a href="{% url 'reservaciones:lista' %}"
+                class="btn btn-outline-secondary">
+                    Limpiar
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+
+                <thead class="table-light">
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Habitación</th>
+                        <th>Entrada</th>
+                        <th>Salida</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for reservacion in reservaciones %}
+                    <tr>
+                        <td>{{ reservacion.cliente }}</td>
+                        <td>{{ reservacion.habitacion.numero }}</td>
+                        <td>{{ reservacion.fecha_entrada|date:"d/m/Y" }}</td>
+                        <td>{{ reservacion.fecha_salida|date:"d/m/Y" }}</td>
+                        <td>${{ reservacion.total }}</td>
+
+                        <td>
+                            {% if reservacion.estado == 'Confirmada' %}
+                                <span class="badge badge-confirmada">Confirmada</span>
+                            {% elif reservacion.estado == 'Cancelada' %}
+                                <span class="badge badge-cancelada">Cancelada</span>
+                            {% else %}
+                                <span class="badge badge-pendiente">Pendiente</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'reservaciones:editar' reservacion.pk %}"
+                                class="btn btn-sm btn-outline-primary">
+                                    Editar
+                                </a>
+
+                                {% if reservacion.estado != 'Cancelada' %}
+                                <a href="{% url 'reservaciones:cancelar' reservacion.pk %}"
+                                class="btn btn-sm btn-outline-danger">
+                                    Cancelar
+                                </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center py-4 text-muted">
+                            No hay reservaciones registradas.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
